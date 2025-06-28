@@ -3,65 +3,95 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Mini Shop - User Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .login-card {
-            max-width: 400px;
-            margin: auto;
-            margin-top: 10%;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            background: white;
-        }
-    </style>
+    <title>User Login - Mini Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
-<body>
-    <div class="login-card">
-        <h3 class="text-center mb-4">User Login</h3>
-        <form id="userLoginForm">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" required />
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password" required />
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
-        <p class="text-center mt-3">
-            Don't have an account? <a href="#">Register</a>
-        </p>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">👤 User Login / Register</h1>
+
+        <div class="card p-4 mx-auto" style="max-width: 400px;">
+            <input type="email" id="email" class="form-control mb-3" placeholder="Email" />
+            <input type="password" id="password" class="form-control mb-3" placeholder="Password" />
+
+            <button id="loginBtn" class="btn btn-primary w-100 mb-2">Login</button>
+            <button id="registerBtn" class="btn btn-success w-100">Register</button>
+        </div>
     </div>
 
     <script>
-        document.getElementById('userLoginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        const API_URL = "https://minishop-enc6.onrender.com/api/user";
+
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const loginBtn = document.getElementById("loginBtn");
+        const registerBtn = document.getElementById("registerBtn");
+
+        // ✅ User Login
+        loginBtn.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                alert("Please enter email and password.");
+                return;
+            }
 
             try {
-                const res = await fetch('/api/user/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const res = await fetch(`${API_URL}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password })
                 });
+
                 const data = await res.json();
+
                 if (res.ok) {
-                    alert('Login successful!');
-                    // Redirect to shop after login
-                    window.location.href = '/shop.html';
+                    localStorage.setItem("token", data.token);
+                    alert("Login successful!");
+
+                    // Redirect based on isAdmin
+                    if (data.isAdmin) {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = "shop.html";
+                    }
                 } else {
-                    alert(data.message || 'Login failed.');
+                    alert(data.message || "Login failed.");
                 }
-            } catch (err) {
-                console.error(err);
-                alert('An error occurred.');
+            } catch (error) {
+                console.error(error);
+                alert("An error occurred during login.");
+            }
+        });
+
+        // ✅ User Registration
+        registerBtn.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                alert("Please enter email and password.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert("Registration successful! You can now log in.");
+                } else {
+                    alert(data.message || "Registration failed.");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("An error occurred during registration.");
             }
         });
     </script>

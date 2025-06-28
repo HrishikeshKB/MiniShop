@@ -25,19 +25,13 @@ app.use('/api', authRoutes);
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-// ❌ Removed fallback to index.html as you do not have index.html
-// It was causing crashes.
-// If you add React or SPA in the future, you can uncomment this.
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// ✅ Serve shop.html on the root route to avoid "Cannot GET /"
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
 });
-*/
 
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server started on port ${PORT}`);
 });
-
-

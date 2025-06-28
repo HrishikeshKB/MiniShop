@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'Public')));
 
 // ✅ Serve shop.html on the root route to avoid "Cannot GET /"
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Public', 'login.html'));
+    res.sendFile(path.join(__dirname, 'Public', 'userlogin.html'));
 });
 
 // Start server

@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/api/products';
+const API_URL = '/api/products';
+
 
 const productList = document.getElementById('productList');
 const productForm = document.getElementById('productForm');

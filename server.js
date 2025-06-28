@@ -23,11 +23,11 @@ app.use('/api/products', productRoutes);
 app.use('/api', authRoutes);
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'Public')));
 
 // ✅ Serve shop.html on the root route to avoid "Cannot GET /"
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+    res.sendFile(path.join(__dirname, 'Public', 'shop.html'));
 });
 
 // Start server

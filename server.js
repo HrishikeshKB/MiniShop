@@ -22,6 +22,10 @@ const authRoutes = require('./routes/authRoutes');
 app.use('/api/products', productRoutes);
 app.use('/api', authRoutes);
 
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/user', userRoutes);
+
+
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'Public')));
 
